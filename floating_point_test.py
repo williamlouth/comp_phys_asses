@@ -1,13 +1,13 @@
 import numpy as np
 import pylab as pl
-
+import mpmaths
 
 #np.set_printoptions(formatter = float,floatmode = None)
 a = np.float64(1.0)
 
 
 
-
+"""use mpmaths some """
 
 
 

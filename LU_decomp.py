@@ -104,26 +104,26 @@ L,U = L_U_split(decomposition(input_array)[0])
 #print(out)
 #L,U = L_U_split(out[0])
 
-print(L)
-print(U)
+#print(L)
+#print(U)
 #print(L_U_split(out[0]))
 
 
-print(forward_back_substitution(L,U,b))
+#print(forward_back_substitution(L,U,b))
 
 x = forward_back_substitution(L,U,b)
 
 A = np.dot(L,U)
 
 Ax = np.dot(A,x)
-print(Ax)
+#print(Ax)
 
 x0 = forward_back_substitution(L,U,np.array([1,0,0,0,0]))
-print(x0)
+#print(x0)
 
 inv_A = find_inverse(A)
-print(inv_A)
-print(np.dot(A,inv_A))
+#print(inv_A)
+#print(np.dot(A,inv_A))
 
 
 
