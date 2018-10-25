@@ -4,46 +4,58 @@ import pylab as pl
 
 
 np.random.seed(10)
-a = np.random.uniform(0,1)
-b = np.array([0.0])
-for i in range(0,10**5):
-    b = np.append(b,np.random.uniform(0,1))
 
+
+
+
+uniform_0to1 = np.random.uniform(0,1,10**5)
 pl.figure(1)
-pl.hist(b,100)
+pl.hist(uniform_0to1,100)
 
-c = np.array([0.0])
 
-for i in b:
-    c = np.append(c,i*2)
 
-print(c)
-
-d = np.array([0.0])
-for i in b:
-    d = np.append(d,np.arccos(1-2*i))
-
-#print(d)
+uniform_0topi = uniform_0to1 * np.pi
 pl.figure(2)
-pl.hist(d)
+pl.hist(uniform_0topi,100)
+
+
+hsin = np.array([np.arccos(1-2*x) for x in uniform_0to1])  #intergrate 0.5sinx then inverse it. Check limits
+pl.figure(3)
+pl.hist(hsin)
 
 
 
 
 
-keep = np.array([0.0])
-for i in c:
-    if np.random.uniform(0,1) < (2/np.pi)*(np.sin(i))**2:
-        keep = np.append(keep,i)
+keep = np.array([x for x in uniform_0topi if np.random.uniform(0,1) < (2/np.pi)*(np.sin(x))**2])
+pl.figure(4)
+pl.hist(keep)
+
+#keep = np.array([x if np.random.uniform(0,1) < (2/np.pi)*(np.sin(x))**2 for x in uniform_0topi])
+
+
+# =============================================================================
+# for i in c:
+#     if np.random.uniform(0,1) < (2/np.pi)*(np.sin(i))**2:
+#         keep = np.append(keep,i)
+# =============================================================================
         
     
 
 
-pl.figure(3)
-pl.hist(keep)
 
 
 
+# =============================================================================
+# keep2 = np.array([0.0])
+# for i in d:
+#     if np.random.uniform(0,1) * 0.5*np.sin(i)  <  (2/np.pi)*np.sin(i)**2:
+#         keep2 = np.append(keep2,i)
+#     
+# pl.figure(4)
+# pl.hist(keep)
+# 
+# =============================================================================
 
 
 
