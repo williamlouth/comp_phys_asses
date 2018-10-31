@@ -42,9 +42,6 @@ def linear_interp(x,y,test_x):
 def cubic_spline(x,y):
     """Computes the """
     n = x.shape[0]
-#    b = np.zeros((n,1))
-#    for i in range(0,n-1):
-#        b[i] = (y[i+1] - y[i])/(x[i+1]-x[i]) - (y[i]-y[i-1])/(x[i]-x[i-1])
         
     b = np.array([(y[i+1] - y[i])/(x[i+1]-x[i]) - (y[i]-y[i-1])/(x[i]-x[i-1]) for i in range(1,n-1)]) #b[0] and b[n-1] are boundary cond and are set below
     

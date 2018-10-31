@@ -38,9 +38,10 @@ pl.hist(sin2,histogram_bin_number)
 
 #rejection method  with a comparison function of y = 0.5sin(x)
 #creates a np array with random nuumbers with a 2/pi *sin squared distribution
-my_sin =  np.array([np.arccos(1-x) for x in uniform_0to1*2])    #I wrote my own sin distribution instead of the numpy one :)
+my_sin =  np.array([np.arccos(1-x*np.pi/2) for x in uniform_0to1*4/np.pi])     #4/pi so that arcos domain is 1 -> -1
 
-sin3 = np.array([x for x in my_sin if np.random.uniform(0,1) *  np.sin(x)  < (2/np.pi)*(np.sin(x))**2])
+np.random.seed(22)      #seed for the rand uniform in next line
+sin3 = np.array([x for x in my_sin if np.random.uniform(0,1) * 2/np.pi * np.sin(x)  < (2/np.pi)*(np.sin(x))**2])
 pl.figure(5)
 pl.hist(sin3,histogram_bin_number)
 
