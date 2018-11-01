@@ -1,8 +1,8 @@
 import numpy as np
 import pylab as pl
 
-start = -2
-stop = 2
+start = -10
+stop = 15
 #no_points = 100
 step_size = 0.05
 
@@ -19,7 +19,36 @@ gt = np.array([1 if i >-0.5 and i <0.5 else 0 for i in t])
 ht = np.array([1 if i >0 and i <1 else 0 for i in t])
 
                            #signal function
-print(ht)
+#print(ht)
+
+def f(t):
+    if t > -0.5 and t < 0.5:
+        return 1
+    else:
+        return 0
+    
+def g(t):
+    if t > 0 and t < 1:
+        return 1
+    else:
+        return 0
+    
+def asses_gaussian(t):
+    return (1/(np.sqrt(2*np.pi) )* np.exp((-(t**2))/2))
+
+def asses_top_hat(t):
+    if t > 3 and t < 5:
+        return 4
+    else:
+        return 0
+    
+    
+    
+gt = np.array([asses_gaussian(x) for x in t])   
+ht = np.array([asses_top_hat(x) for x in t])
+    
+
+
     
 
     
@@ -67,23 +96,46 @@ pl.plot(t,conv.real)                      # +(stop - start)/2 is half the freq r
 
 pl.figure(5)
 #t2 = np.linspace(start*2,stop*2,(no_points*2)-1)
+t2 = np.arange(start*2,stop*2,step_size)
+t2 = t2[0:t2.size-1]
+npconv = np.convolve(gt,ht)
+pl.plot(t2,npconv)
+
+
+
+
+
+
+
+
+
+
 # =============================================================================
-# t2 = np.arange(start*2,stop*2,step_size)
-# t2 = t2[0:t2.size-1]
-# npconv = np.convolve(gt,ht)
-# pl.plot(t2,npconv)
+# my_f = [f(x) for x in t]
+# my_g = [g(x) for x in t]
+# conv = np.empty([len(t)])
+# 
+# for x in range(len(t)):
+#     msum = 0.0
+#     for i in t:
+#         msum += ( f(t[x]-i)* g(i) )
+#     conv[x] = msum
+#    
+# pl.figure(99)
+# pl.plot(t,conv)     
 # =============================================================================
 
 
+conv = np.empty([len(t)])
 
-
-
-
-
-
-
-
-
+for x in range(len(t)):
+    msum = 0.0
+    for i in t:
+        msum += ( asses_gaussian(t[x]-i)* asses_top_hat(i) )
+    conv[x] = msum
+   
+pl.figure(99)
+pl.plot(t,conv)     
 
 
 

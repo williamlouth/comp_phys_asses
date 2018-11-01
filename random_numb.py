@@ -42,6 +42,7 @@ my_sin =  np.array([np.arccos(1-x*np.pi/2) for x in uniform_0to1*4/np.pi])     #
 
 np.random.seed(22)      #seed for the rand uniform in next line
 sin3 = np.array([x for x in my_sin if np.random.uniform(0,1) * 2/np.pi * np.sin(x)  < (2/np.pi)*(np.sin(x))**2])
+print(len(sin3)) #make more then take first 10**5
 pl.figure(5)
 pl.hist(sin3,histogram_bin_number)
 
