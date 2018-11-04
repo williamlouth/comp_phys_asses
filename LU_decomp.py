@@ -1,5 +1,4 @@
 import numpy as np
-import pylab as pl
 
 
 
@@ -9,8 +8,20 @@ def decomposition(input_array):
     returns lower + upper triangle matrices with leading edge lower removed
     and the determinant of the matrix. Only accepts square matrices"""
     
-    if input_array.shape[0] != input_array.shape[1]:
-        return "input array not a square matrix"
+    if not (type(input_array) is np.ndarray or type(input_array) is np.array or type(input_array) is list):
+            raise Exception("decomposition only accepts numpy arrays and list. Given type of input_array",type(input_array))
+    try:
+        input_array[0]
+    except:
+        raise ValueError("input_array is an empty array")
+            
+    try:
+        if input_array.shape[0] != input_array.shape[1]:
+            raise Exception("input array is not a square matrix. Matrix shape is",input_array.shape)
+    except IndexError:
+        raise Exception("input array is not a square matrix. array shape is",input_array.shape)
+        
+        
     
     N = input_array.shape[0]
     L = np.zeros((N,N))
@@ -33,54 +44,48 @@ def decomposition(input_array):
                 my_sum2 += L[i][k]*U[k][j] 
             L[i][j] = (1/U[j][j])*(input_array[i][j] - my_sum2)   #same as above but for the lower matrix
             
+    output_L = np.copy(L)   #keep a copy of L before removing leading edge ones
     for i in range(0,N):
         L[i][i] = 0.0       #for putting L and U into 1 matrix remove the leading edge of lower that we set all to 1 at start (crouts method)
         
-    det = 1
+    det = 1.0
     for i in range(0,N):
         det *= U[i][i]      #determinant is the product of the leading edge
         
-    return L+U,det
+    return L+U,det,output_L,U
 
 
     
-def L_U_split(input_array):
-    """Takes in an array that is L+U and splits it into L and U. Returns L,U.
-    only accepts square matrices"""
-    if input_array.shape[0] != input_array.shape[1]:
-        return "input array not a square matrix"
-    N = input_array.shape[0]
-    L = np.zeros((N,N))
-    U = np.zeros((N,N))
-    
-    for i in range(0,N):
-        for j in range(0,i):
-            L[i][j] = input_array[i][j]
-        for j in range(i,N):
-            U[i][j] = input_array[i][j]
-            
-    for i in range(0,N):
-        L[i][i] = 1.0
-    
-    return L,U
 
 
 def forward_back_substitution(L,U,b):
     """does forward and back substitution to return x for an equation of the form L.U.x = b ."""
-    if  input_array.shape[0] != input_array.shape[1]:
-        return "input array not a square matrix"
+    
+    if not (type(L) is np.ndarray or type(L) is np.array or type(L) is list):
+            raise Exception("forward_back_substitution only accepts numpy arrays and list. Given type of L",type(L))
+    if not (type(U) is np.ndarray or type(U) is np.array or type(U) is list):
+            raise Exception("forward_back_substitution only accepts numpy arrays and list. Given type of U",type(U))
+    if not (type(b) is np.ndarray or type(b) is np.array or type(b) is list):
+            raise Exception("forward_back_substitution only accepts numpy arrays and list. Given type of b",type(b))
+            
+    L = np.asarray(L)   #type cast to numpy array
+    U = np.asarray(U)
+    b = np.asarray(b)
+    
+    
+    
     N = L.shape[0]
     y = np.zeros(N)
     x = np.zeros(N)
     
-    for i in range(0,N):
+    for i in range(0,N):        #solve for y in equation L.y = b
         my_sum = 0.0
-        for j in range(0,i):
-            my_sum += L[i][j]*y[j]
-        y[i] = (1.0/L[i][i])*(b[i] - my_sum)
+        for j in range(0,i):    #range of the column is up to the row value
+            my_sum += L[i][j]*y[j]  
+        y[i] = (1.0/L[i][i])*(b[i] - my_sum)    
         
-    for i in range(N-1,-1,-1):
-        my_sum = 0.0
+    for i in range(N-1,-1,-1):  #solve for x using the y values computed above
+        my_sum = 0.0            #range counts down from N-1 to 0. This is due to the shape of the lower matrix
         for j in range(i+1,N):
             my_sum += U[i][j]*x[j]
         x[i] = (1.0/U[i][i])*(y[i] - my_sum)
@@ -91,90 +96,52 @@ def forward_back_substitution(L,U,b):
 
 def find_inverse(input_array):
     """returns the inverse of a square matrix by LU decomposition and the forward back substitution"""
-    if  input_array.shape[0] != input_array.shape[1]:
-        return "input array not a square matrix"
-    N = input_array.shape[0]
-    L,U = L_U_split(decomposition(input_array)[0])
-    inv_A = np.zeros((N,N))
     
-    for j in range(0,N):
-        b = np.zeros(N)
-        b[j] = 1.0
+    if not (type(input_array) is np.ndarray or type(input_array) is np.array or type(input_array) is list):
+        raise Exception("find_inverse only accepts numpy arrays and list. Given type of input_array",type(input_array))
+    try:
+        input_array[0]
+    except:
+        raise ValueError("input_array is an empty array")
+            
+    try:
+        if input_array.shape[0] != input_array.shape[1]:
+            raise Exception("input array is not a square matrix. Matrix shape is",input_array.shape)
+    except IndexError:
+        raise Exception("input array is not a square matrix. array shape is",input_array.shape)
+        
+
+    N = input_array.shape[0]
+    L,U = (decomposition(input_array)[2:4]) #decompose the array into Lower and Upper triangular matrices
+    inv_A = np.zeros((N,N))                 #create an empty array to fill
+    
+    for j in range(0,N):    #use eqn solver for L.U.x = b do this for each column in the identity matrix
+        b = np.zeros(N)     
+        b[j] = 1.0          #this sets the correct value of b to 1 for the relevent column of the identity matrix being calculated
         x = forward_back_substitution(L,U,b)
         for i in range(0,N):
-            inv_A[i][j] = x[i]
+            inv_A[i][j] = x[i]  #fill in the column of the identity matrix
     
     return inv_A
 
 
-input_array = np.array([[3,1,0,0,0],[3,9,4,0,0],[0,9,20,10,0],[0,0,-22,31,-25],[0,0,0,-55,60]])
-#print(decomposition(input_array))
-
-b = np.array([2,5,-4,8,9])
-
-L,U = L_U_split(decomposition(input_array)[0])
-
-#out = decomposition(input_array)
-#print(out)
-#L,U = L_U_split(out[0])
-
-#print(L)
-#print(U)
-#print(L_U_split(out[0]))
+def LU_asses_func():
+    input_array = np.array([[3,1,0,0,0],[3,9,4,0,0],[0,9,20,10,0],[0,0,-22,31,-25],[0,0,0,-55,60]])
+    print('input_array',input_array)
+    determinant,L,U = decomposition(input_array)[1:4]
+    print('lower matrix', L)
+    print('upper matrix', U)
+    print('determinant', determinant)
+    
+    b = np.array([2,5,-4,8,9])
+    print('input b',b)
+    x = forward_back_substitution(L,U,b)
+    print('x',x)
 
 
-#print(forward_back_substitution(L,U,b))
-
-x = forward_back_substitution(L,U,b)
-
-A = np.dot(L,U)
-
-Ax = np.dot(A,x)
-#print(Ax)
-
-x0 = forward_back_substitution(L,U,np.array([1,0,0,0,0]))
-#print(x0)
-
-inv_A = find_inverse(A)
-#print(inv_A)
-#print(np.dot(A,inv_A))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    inv_A = find_inverse(input_array)
+    print('inverse of input_array',inv_A)
+    return
 
 
 
