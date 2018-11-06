@@ -1,8 +1,8 @@
 import numpy as np
 import pylab as pl
 
-start = -10
-stop = 15
+start = -8
+stop = 8
 #no_points = 100
 step_size = 0.05
 
@@ -46,7 +46,21 @@ def asses_top_hat(t):
     
 gt = np.array([asses_gaussian(x) for x in t])   
 ht = np.array([asses_top_hat(x) for x in t])
-    
+# =============================================================================
+# 
+# padding_size = 1000
+# gt = np.append(gt,np.zeros(padding_size))
+# ht = np.append(ht,np.zeros(padding_size))
+# t = np.append(t,np.arange(t[-1],t[-1]+(padding_size*step_size),step_size))
+# 
+# gt = np.append(np.zeros(padding_size),gt)
+# ht = np.append(np.zeros(padding_size),ht)
+# 
+# ma = np.arange(t[0],t[0]-(padding_size*step_size),-step_size)
+# t = np.append(ma,t)
+# 
+# no_points = t.size  
+# =============================================================================
 
 
     
@@ -79,9 +93,9 @@ pl.plot(t,gt)
 pl.plot(t,ht)
 
 pl.figure(2)        #plot the real parts of the fourier transform
-pl.plot(fft_freq,hfft)
+pl.plot(fft_freq,hfft.real)
 pl.figure(3)
-pl.plot(fft_freq,gfft)
+pl.plot(fft_freq,gfft.real)
 
 
 pl.figure(7)
@@ -90,20 +104,33 @@ pl.plot(fft_freq,x)
 
 
 pl.figure(4)
-conv = np.fft.ifft(hfft*gfft)                   #the convolution of g and h using the convolution theorem  there is a normalisation factor
+conv = np.fft.ifft((1/no_points)*gfft*hfft)                   #the convolution of g and h using the convolution theorem  there is a normalisation factor
 #pl.plot(t+((stop - start)/2),conv.real)   
 pl.plot(t,conv.real)                      # +(stop - start)/2 is half the freq range,  because of aliasing
 
-pl.figure(5)
-#t2 = np.linspace(start*2,stop*2,(no_points*2)-1)
-t2 = np.arange(start*2,stop*2,step_size)
-t2 = t2[0:t2.size-1]
-npconv = np.convolve(gt,ht)
-pl.plot(t2,npconv)
+# =============================================================================
+# pl.figure(5)
+# #t2 = np.linspace(start*2,stop*2,(no_points*2)-1)
+# t2 = np.arange(start*2,stop*2,step_size)
+# t2 = t2[0:t2.size-1]
+# npconv = np.convolve(gt,ht)
+# pl.plot(t2,npconv)
+# =============================================================================
 
 
 
-
+# =============================================================================
+# conv = np.empty([len(t)])
+# 
+# for x in range(len(t)):
+#     msum = 0.0
+#     for i in t:
+#         msum += ( asses_gaussian(t[x]-i)* asses_top_hat(i) )
+#     conv[x] = msum
+#    
+# pl.figure(99)
+# pl.plot(t,conv)     
+# =============================================================================
 
 
 
@@ -126,16 +153,7 @@ pl.plot(t2,npconv)
 # =============================================================================
 
 
-conv = np.empty([len(t)])
 
-for x in range(len(t)):
-    msum = 0.0
-    for i in t:
-        msum += ( asses_gaussian(t[x]-i)* asses_top_hat(i) )
-    conv[x] = msum
-   
-pl.figure(99)
-pl.plot(t,conv)     
 
 
 

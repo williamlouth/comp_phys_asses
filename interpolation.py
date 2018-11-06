@@ -115,6 +115,8 @@ def interp_asses_func():
 
     ys = np.array([linear_interp(x,y,j) for j in xs])
     
+    pl.figure(25)
+    
     pl.plot(x,y,'g+')       #plot initial values
     pl.plot(xs,ys)          #plot interpolated values
 

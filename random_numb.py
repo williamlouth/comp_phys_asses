@@ -2,60 +2,59 @@ import numpy as np
 import pylab as pl
 
 
+def random_numb_asses(rand_number = 10**5):
+    np.random.seed(10)      #seed the random number generator
+    
+    histogram_bin_number = 100
+    
+    
+    uniform_0to1 = np.random.uniform(0,1,rand_number)         #use numpy random to generate a np array of random numbers uniform between 0 and 1
+    pl.figure(1)
+    pl.hist(uniform_0to1,histogram_bin_number)                           #plot a histogram of the uniform random numbers
+    
+    
+    
+    uniform_0topi = uniform_0to1 * np.pi                #create a uniform distribution of random numbers from 0 to pi
+    pl.figure(2)
+    pl.hist(uniform_0topi,histogram_bin_number)                          #plot the histogram
+    
+    
+    #transform method
+    hsin = np.array([np.arccos(1-2*x) for x in uniform_0to1])  #create random numbers with a half sin(x) distribution
+    pl.figure(3)                                        #intergrate 0.5sinx then inverse it. Check limits
+    pl.hist(hsin,histogram_bin_number)
+    
+    
+    
+    
+    #rejection method  with a comparison function of y = 1
+    #creates a np array with random nuumbers with a 2/pi *sin squared distribution
+    uniform_0topi_4length = np.pi*np.random.uniform(0,1,rand_number*4) #epsilon aprox equal to 0.3 -> need 4 times length to get rand_number of random numbers
+    sin2 = np.array([x for x in uniform_0topi_4length if np.random.uniform(0,1) < (2/np.pi)*(np.sin(x))**2])
+    print("epsilon for rejection method with comparison function y = 1",len(sin2)/len(uniform_0topi_4length))
+    
+    sin2 = sin2[:rand_number]
+    pl.figure(4)
+    pl.hist(sin2,histogram_bin_number)
+    
+    
+    
+    #rejection method  with a comparison function of y =2/pi sin(x)
+    #creates a np array with random nuumbers with a 2/pi *sin squared distribution
+    uniform_0to1_2length =  np.random.uniform(0,1,rand_number*2)  #epsilon aprox equal to 0.7 -> need 2 times length to get rand_number of random numbers
+    my_sin =  np.array([np.arccos(1-x*np.pi/2) for x in uniform_0to1_2length*4/np.pi])     #4/pi so that arcos domain is 1 -> -1
+    
 
-np.random.seed(10)      #seed the random number generator
-
-rand_number = 10**5    #the number of random numbers
-histogram_bin_number = 100
-
-
-uniform_0to1 = np.random.uniform(0,1,rand_number)         #use numpy random to generate a np array of random numbers uniform between 0 and 1
-pl.figure(1)
-pl.hist(uniform_0to1,histogram_bin_number)                           #plot a histogram of the uniform random numbers
-
-
-
-uniform_0topi = uniform_0to1 * np.pi                #create a uniform distribution of random numbers from 0 to pi
-pl.figure(2)
-pl.hist(uniform_0topi,histogram_bin_number)                          #plot the histogram
-
-
-#transform method
-hsin = np.array([np.arccos(1-2*x) for x in uniform_0to1])  #create random numbers with a half sin(x) distribution
-pl.figure(3)                                        #intergrate 0.5sinx then inverse it. Check limits
-pl.hist(hsin,histogram_bin_number)
-
-
-
-
-#rejection method  with a comparison function of y = 1
-#creates a np array with random nuumbers with a 2/pi *sin squared distribution
-sin2 = np.array([x for x in uniform_0topi if np.random.uniform(0,1) < (2/np.pi)*(np.sin(x))**2])
-pl.figure(4)
-pl.hist(sin2,histogram_bin_number)
-
-
-
-#rejection method  with a comparison function of y = 0.5sin(x)
-#creates a np array with random nuumbers with a 2/pi *sin squared distribution
-my_sin =  np.array([np.arccos(1-x*np.pi/2) for x in uniform_0to1*4/np.pi])     #4/pi so that arcos domain is 1 -> -1
-
-np.random.seed(22)      #seed for the rand uniform in next line
-sin3 = np.array([x for x in my_sin if np.random.uniform(0,1) * 2/np.pi * np.sin(x)  < (2/np.pi)*(np.sin(x))**2])
-print(len(sin3)) #make more then take first 10**5
-pl.figure(5)
-pl.hist(sin3,histogram_bin_number)
-
-
-
-#many more rejected in first rejection method
-
-
-
-
-
-
-
+    sin3 = np.array([x for x in my_sin if np.random.uniform(0,1) * 2/np.pi * np.sin(x)  < (2/np.pi)*(np.sin(x))**2])
+    print("epsilon for rejection method with comparison function y = 2/pi sin(x)",len(sin3)/len(uniform_0to1_2length))
+    
+  
+    sin3 = sin3[:rand_number]
+    pl.figure(5)
+    pl.hist(sin3,histogram_bin_number)
+    
+    
+    
 
 
 
