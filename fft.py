@@ -1,168 +1,84 @@
 import numpy as np
 import pylab as pl
+import matplotlib.lines as mlines
+import matplotlib.patches as mpatches
 
-start = -25
-stop = 15
-#no_points = 100
-step_size = 0.05
 
-#t= np.linspace(start,stop,no_points)
-t = np.arange(start,stop,step_size)
-no_points = t.size
-            
-#gt = np.array([(1/(np.sqrt(2*np.pi) )* np.exp((-(i**2))/2)) for i in t]) 
-#ht = np.array([(1/(np.sqrt(2*np.pi) )* np.exp((-(i**2))/2)) for i in t])       #gaussian response function 
-#ht = np.array([4 if i >3 and i <5 else 0 for i in t])
-#gt = np.array([4 if i >3 and i <5 else 0 for i in t])
-
-gt = np.array([1 if i >-0.5 and i <0.5 else 0 for i in t])
-ht = np.array([1 if i >5 and i <6 else 0 for i in t])
-
-                           #signal function
-#print(ht)
-
-def f(t):
-    if t > -0.5 and t < 0.5:
-        return 1
-    else:
-        return 0
-    
-def g(t):
-    if t > 0 and t < 1:
-        return 1
-    else:
-        return 0
-    
 def asses_gaussian(t):
     return (1/(np.sqrt(2*np.pi) )* np.exp((-(t**2))/2))
-
+    
 def asses_top_hat(t):
     if t > 3 and t < 5:
         return 4
     else:
         return 0
+
+def fft_asses():
+    start = 0           #this has to be zero
+    stop = 50
+    step_size = 0.1
     
     
+    t = np.arange(start,stop,step_size)
+    no_points = t.size
+                
+         
+    gt = np.array([asses_gaussian(x)  if x<stop/2 else asses_gaussian(stop-x) for x in t])   
+    ht = np.array([asses_top_hat(x) for x in t])
     
-#gt = np.array([asses_gaussian(x) for x in t])   
-#ht = np.array([asses_top_hat(x) for x in t])
-# =============================================================================
-# 
-# padding_size = 1000
-# gt = np.append(gt,np.zeros(padding_size))
-# ht = np.append(ht,np.zeros(padding_size))
-# t = np.append(t,np.arange(t[-1],t[-1]+(padding_size*step_size),step_size))
-# 
-# gt = np.append(np.zeros(padding_size),gt)
-# ht = np.append(np.zeros(padding_size),ht)
-# 
-# ma = np.arange(t[0],t[0]-(padding_size*step_size),-step_size)
-# t = np.append(ma,t)
-# 
-# no_points = t.size  
-# =============================================================================
-
-
+        
+    hfft = np.fft.fft(ht)           #fourier trasnform of h
+    gfft = np.fft.fft(gt)           #fourier trasnform of g
     
-
+    conv = step_size*np.fft.ifft(gfft*hfft)   #the convolution of g and h using the convolution theorem
+    #step_size is the normalisation constant
     
-hfft = np.fft.fft(ht)           #fourier trasnform of h
-gfft = np.fft.fft(gt)           #fourier trasnform of g
-# =============================================================================
-# 
-# test = np.array(gfft)
-# gfft = np.append(test[int(len(test)/2):] , test[:int(len(test)/2)] )
-# gfft  = np.array(gfft)
-# 
-# 
-# test2 = np.array(hfft)
-# hfft = np.append(test2[int(len(test2)/2):] , test2[:int(len(test2)/2)]  )
-# hfft = np.array(hfft)
-# =============================================================================
-
-
-fft_freq = np.fft.fftfreq(no_points)
-#fft_freq = np.fft.fftshift(fft_freq)
-
-#print(gt)
-#print(ht)
-
-
-pl.figure(1)        #plot the funcitons
-pl.plot(t/step_size,gt)
-pl.plot(t/step_size,ht)
-
-pl.figure(2)        #plot the real parts of the fourier transform
-pl.plot(fft_freq,hfft.real)
-pl.figure(3)
-pl.plot(fft_freq,gfft.real)
-
-
-pl.figure(7)
-x = gfft*hfft
-pl.plot(fft_freq,x)
-
-
-pl.figure(4)
-conv = np.fft.ifft((1/no_points)*gfft*hfft)                   #the convolution of g and h using the convolution theorem  there is a normalisation factor
-conv = np.fft.ifftshift(conv)
-#pl.plot(t+((stop - start)/2),conv.real)   
-pl.plot(t/step_size,conv.real)                      # +(stop - start)/2 is half the freq range,  because of aliasing
-
-
-
-pl.figure(5)
-#t2 = np.linspace(start*2,stop*2,(no_points*2)-1)
-t2 = np.arange(start*2,stop*2,step_size)
-t2 = t2[0:t2.size-1]
-npconv = np.convolve(gt,ht,"same")
-pl.plot(t,npconv)
-
-pl.figure(6)
-#t2 = np.linspace(start*2,stop*2,(no_points*2)-1)
-t2 = np.arange(start*2,stop*2,step_size)
-t2 = t2[0:t2.size-1]
-npconv = np.convolve(gt,ht)
-pl.plot(t2,npconv)
-
-
-
-# =============================================================================
-# conv = np.empty([len(t)])
-# 
-# for x in range(len(t)):
-#     msum = 0.0
-#     for i in t:
-#         msum += ( asses_gaussian(t[x]-i)* asses_top_hat(i) )
-#     conv[x] = msum
-#    
-# pl.figure(99)
-# pl.plot(t,conv)     
-# =============================================================================
+    
+    fft_freq = np.fft.fftfreq(no_points)      #the frequencies that the fourier transform returns
+    
+    pl.figure(24)        #plot the functions
+    pl.figure(figsize=(10,7.5))
+    pl.xlabel("time (s)",fontsize = 20)
+    pl.ylabel("g(t),h(t)",fontsize = 20)
+    pl.title("A graph showing g(t) and h(t)",fontsize = 20)
+    orange_line = mlines.Line2D([], [], color='orange', marker='+', markersize=15, label='g(t)')
+    blue_line = mlines.Line2D([], [], color='blue', marker='+', markersize=15, label='h(t)')
+    pl.legend(handles=[orange_line,blue_line])
+    pl.plot(t,gt,'orange')
+    pl.plot(t,ht,'b')
+    pl.savefig("gtht.png",bbox_inches = 'tight',dpi = 200)
+    
+    pl.figure(8)        #plot the real parts of the fourier transform
+    pl.figure(figsize=(10,7.5))
+    pl.xlabel("frequency",fontsize = 20)
+    pl.ylabel("real part of fft(g(t)) and fft(h(t))",fontsize = 20)
+    pl.title("A graph showing the fast fourier transform of g(t) and h(t)",fontsize = 20)
+    orange_line = mlines.Line2D([], [], color='orange', marker='+', markersize=15, label='fft of g(t)')
+    blue_line = mlines.Line2D([], [], color='blue', marker='+', markersize=15, label='fft of h(t)')
+    pl.legend(handles=[orange_line,blue_line])
+    pl.plot(fft_freq,hfft.real,'b')
+    pl.plot(fft_freq,gfft.real,'orange')
+    pl.savefig("ffts.png",bbox_inches = 'tight',dpi = 200)
+    
+    
+    pl.figure(10)    #plot the convolution of g and h
+    pl.figure(figsize=(10,7.5))
+    pl.xlabel("time (s)",fontsize = 20)
+    pl.ylabel("convolution of g(t) and h(t)",fontsize = 20)
+    pl.title("A graph showing the convolution of g(t) and h(t)",fontsize = 20)
+                    
+    pl.plot(t,conv.real)
+    pl.savefig("conv.png",bbox_inches = 'tight',dpi = 200)
 
 
 
 
 
 
-# =============================================================================
-# my_f = [f(x) for x in t]
-# my_g = [g(x) for x in t]
-# conv = np.empty([len(t)])
-# 
-# for x in range(len(t)):
-#     msum = 0.0
-#     for i in t:
-#         msum += ( f(t[x]-i)* g(i) )
-#     conv[x] = msum
-#    
-# pl.figure(99)
-# pl.plot(t,conv)     
-# =============================================================================
 
 
-
-
+if __name__ == '__main__': #if running as main then run asses func
+    fft_asses()
 
 
 

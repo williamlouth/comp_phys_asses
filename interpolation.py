@@ -110,38 +110,41 @@ def interp_asses_func():
     x = np.array([-2.1,-1.45,-1.3,-0.2,0.1,0.15,0.8,1.1,1.5,2.8,3.8])
     y = np.array([0.012155,0.122151,0.184520,0.960789,0.990050,0.977751,0.528292,0.298197,0.105399,3.936690e-4,5.355348e-7])
     #the arrays given to use in the assignment
+    cubic_number = 100
+    linear_number = 100
 
-    xs = np.linspace(-2.1,3.8,20)       #create lots of x values between x start and x end for linear interpolation
+    xs = np.linspace(-2.1,3.8,linear_number)       #create lots of x values between x start and x end for linear interpolation
     xs = np.append(xs,x)                #adding the given points to the curve as else can get 
     xs = np.sort(xs)                    #some weird behaviour between the two points either side of a given point.
 
     ys = np.array([linear_interp(x,y,j) for j in xs])
     
-    pl.figure(25)               #figure set up
-    pl.figure(figsize=(20,10))
+    pl.figure(1)               #figure set up
+    pl.figure(figsize=(10,7.5))
     pl.xlabel("x",fontsize = 15)
     pl.ylabel("y")
     green_line = mlines.Line2D([], [], color='green', marker='.', markersize=15, label='Raw data')
-    blue_patch = mpatches.Patch(color='blue', label='Linear interpolation')
+    blue_line = mlines.Line2D([], [], color='blue', marker='*', markersize=15, label='linear interpolation')
     red_line = mlines.Line2D([], [], color='red', marker='+', markersize=15, label='Cubic spline')
-    pl.legend(handles=[green_line,blue_patch,red_line])
+    pl.legend(handles=[green_line,blue_line,red_line])
     pl.title("A plot showing linear interpolation and a natural cubic spline of a set of data",fontsize = 20)
     
 
    
-    pl.plot(x,y,'g.',markersize = 10)       #plot initial values
-    pl.plot(xs,ys)          #plot interpolated values
+    
+    pl.plot(xs,ys,'b*',markersize = 7.5)          #plot interpolated values
+    pl.plot(x,y,'g.',markersize = 7.5)       #plot initial values
 
     
 
 
     X = cubic_spline_derivatives(x,y) #an array of the second derivatives
 
-    interp_x = np.linspace(-2.1,3.8,100)    #x values for the cubic spline
+    interp_x = np.linspace(-2.1,3.8,cubic_number)    #x values for the cubic spline
     interp_y = np.array([cubic_spline_interpolation(x,y,X,interp_x[i]) for i in range(interp_x.shape[0])])
  
-    pl.plot(interp_x,interp_y,'r+',markersize = 10)
-    pl.savefig('interpolation.png',bbox_inches='tight')
+    pl.plot(interp_x,interp_y,'r+',markersize = 7.5)
+    pl.savefig('interpolation.png',bbox_inches='tight',dpi = 250)
     
     
 
