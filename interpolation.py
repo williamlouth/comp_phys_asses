@@ -1,5 +1,7 @@
 import numpy as np
 import pylab as pl
+import matplotlib.lines as mlines
+import matplotlib.patches as mpatches
 import LU_decomp as LU
 
 
@@ -115,9 +117,19 @@ def interp_asses_func():
 
     ys = np.array([linear_interp(x,y,j) for j in xs])
     
-    pl.figure(25)
+    pl.figure(25)               #figure set up
+    pl.figure(figsize=(20,10))
+    pl.xlabel("x",fontsize = 15)
+    pl.ylabel("y")
+    green_line = mlines.Line2D([], [], color='green', marker='.', markersize=15, label='Raw data')
+    blue_patch = mpatches.Patch(color='blue', label='Linear interpolation')
+    red_line = mlines.Line2D([], [], color='red', marker='+', markersize=15, label='Cubic spline')
+    pl.legend(handles=[green_line,blue_patch,red_line])
+    pl.title("A plot showing linear interpolation and a natural cubic spline of a set of data",fontsize = 20)
     
-    pl.plot(x,y,'g+')       #plot initial values
+
+   
+    pl.plot(x,y,'g.',markersize = 10)       #plot initial values
     pl.plot(xs,ys)          #plot interpolated values
 
     
@@ -128,9 +140,14 @@ def interp_asses_func():
     interp_x = np.linspace(-2.1,3.8,100)    #x values for the cubic spline
     interp_y = np.array([cubic_spline_interpolation(x,y,X,interp_x[i]) for i in range(interp_x.shape[0])])
  
-    pl.plot(interp_x,interp_y,'r+')
+    pl.plot(interp_x,interp_y,'r+',markersize = 10)
+    pl.savefig('interpolation.png',bbox_inches='tight')
+    
     
 
+
+if __name__ == '__main__': #if running as main then run asses func
+    interp_asses_func()
 
 
 

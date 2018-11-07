@@ -33,9 +33,9 @@ def float_test_asses():
     my_float64 = [i for i in my_float64 if i is not None]
     print('numpy float64 epsilon',my_float64[-1])
 
+
+
 # =============================================================================
-# 
-# 
 #     my_float128 = np.array([machine_acc_test(np.float128(1),np.float128(2**-i)) for i in range(0,100) ]) #works on my linux varied success on windows
 #     my_float128 = [i for i in my_float128 if i is not None]
 #     print('numpy float128 epsilon',my_float128[-1])
@@ -48,10 +48,11 @@ def float_test_asses():
 #     #print(machine_acc_test(np.float16(1),np.float32(2**-4))) #test for the raise error
 # 
 # 
-# 
 # =============================================================================
 
 
+if __name__ == '__main__': #if running as main then run asses func
+    float_test_asses()
 
 
 

@@ -1,8 +1,8 @@
 import numpy as np
 import pylab as pl
 
-start = -8
-stop = 8
+start = -25
+stop = 15
 #no_points = 100
 step_size = 0.05
 
@@ -16,7 +16,7 @@ no_points = t.size
 #gt = np.array([4 if i >3 and i <5 else 0 for i in t])
 
 gt = np.array([1 if i >-0.5 and i <0.5 else 0 for i in t])
-ht = np.array([1 if i >0 and i <1 else 0 for i in t])
+ht = np.array([1 if i >5 and i <6 else 0 for i in t])
 
                            #signal function
 #print(ht)
@@ -44,8 +44,8 @@ def asses_top_hat(t):
     
     
     
-gt = np.array([asses_gaussian(x) for x in t])   
-ht = np.array([asses_top_hat(x) for x in t])
+#gt = np.array([asses_gaussian(x) for x in t])   
+#ht = np.array([asses_top_hat(x) for x in t])
 # =============================================================================
 # 
 # padding_size = 1000
@@ -89,8 +89,8 @@ fft_freq = np.fft.fftfreq(no_points)
 
 
 pl.figure(1)        #plot the funcitons
-pl.plot(t,gt)
-pl.plot(t,ht)
+pl.plot(t/step_size,gt)
+pl.plot(t/step_size,ht)
 
 pl.figure(2)        #plot the real parts of the fourier transform
 pl.plot(fft_freq,hfft.real)
@@ -105,17 +105,25 @@ pl.plot(fft_freq,x)
 
 pl.figure(4)
 conv = np.fft.ifft((1/no_points)*gfft*hfft)                   #the convolution of g and h using the convolution theorem  there is a normalisation factor
+conv = np.fft.ifftshift(conv)
 #pl.plot(t+((stop - start)/2),conv.real)   
-pl.plot(t,conv.real)                      # +(stop - start)/2 is half the freq range,  because of aliasing
+pl.plot(t/step_size,conv.real)                      # +(stop - start)/2 is half the freq range,  because of aliasing
 
-# =============================================================================
-# pl.figure(5)
-# #t2 = np.linspace(start*2,stop*2,(no_points*2)-1)
-# t2 = np.arange(start*2,stop*2,step_size)
-# t2 = t2[0:t2.size-1]
-# npconv = np.convolve(gt,ht)
-# pl.plot(t2,npconv)
-# =============================================================================
+
+
+pl.figure(5)
+#t2 = np.linspace(start*2,stop*2,(no_points*2)-1)
+t2 = np.arange(start*2,stop*2,step_size)
+t2 = t2[0:t2.size-1]
+npconv = np.convolve(gt,ht,"same")
+pl.plot(t,npconv)
+
+pl.figure(6)
+#t2 = np.linspace(start*2,stop*2,(no_points*2)-1)
+t2 = np.arange(start*2,stop*2,step_size)
+t2 = t2[0:t2.size-1]
+npconv = np.convolve(gt,ht)
+pl.plot(t2,npconv)
 
 
 

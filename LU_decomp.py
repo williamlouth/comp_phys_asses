@@ -145,7 +145,8 @@ def LU_asses_func():
 
 
 
-
+if __name__ == '__main__': #if running as main then run asses func
+    LU_asses_func()
 
 
 
