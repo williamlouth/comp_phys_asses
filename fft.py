@@ -16,7 +16,7 @@ def asses_top_hat(t):
 def fft_asses():
     start = 0           #this has to be zero
     stop = 50
-    step_size = 0.1
+    step_size = 0.05
     
     
     t = np.arange(start,stop,step_size)

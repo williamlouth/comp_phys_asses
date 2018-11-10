@@ -23,7 +23,7 @@ def random_numb_asses(rand_number = 10**5):
     pl.figure(figsize=(10,7.5))
     pl.xlabel("x",fontsize = 20)
     pl.ylabel("Number of random numbers",fontsize = 20)
-    pl.title("A histogram showing a uniform distribution between 0 and pi",fontsize = 20)
+    pl.title("A histogram showing a uniform distribution \nbetween 0 and " + r'$\pi$',fontsize = 20)
     pl.hist(uniform_0topi,histogram_bin_number)                          #plot the histogram
     pl.savefig("uniform0pi",bbox_inches = 'tight',dpi = 250)
     

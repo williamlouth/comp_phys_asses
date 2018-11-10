@@ -44,13 +44,13 @@ def decomposition(input_array):
                 my_sum2 += L[i][k]*U[k][j] 
             L[i][j] = (1/U[j][j])*(input_array[i][j] - my_sum2)   #same as above but for the lower matrix
             
-    output_L = np.copy(L)   #keep a copy of L before removing leading edge ones
+    output_L = np.copy(L)   #keep a copy of L before removing diagonal ones
     for i in range(0,N):
         L[i][i] = 0.0       #for putting L and U into 1 matrix remove the leading edge of lower that we set all to 1 at start (crouts method)
         
     det = 1.0
     for i in range(0,N):
-        det *= U[i][i]      #determinant is the product of the leading edge
+        det *= U[i][i]      #determinant is the product of the diagonal
         
     return L+U,det,output_L,U
 
@@ -132,6 +132,7 @@ def LU_asses_func():
     print('lower matrix', L)
     print('upper matrix', U)
     print('determinant', determinant)
+    
     
     b = np.array([2,5,-4,8,9])
     print('input b',b)
