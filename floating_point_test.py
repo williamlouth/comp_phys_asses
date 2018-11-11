@@ -19,7 +19,7 @@ def float_test_asses():
     
     my_float = np.array([machine_acc_test(np.float(1),np.float(2**-i)) for i in range(0,100) ])#called my_float because float is a special phrase
     my_float = [i for i in my_float if i is not None] #remove the none entries in my_float
-    print('python float epsilon',my_float[-1])#print the last entry in the list. This is the smallest number which a-b != a
+    print('python float epsilon',my_float[-1])#print the last entry in the list. This is the smallest number for which a-b != a
 
     my_float16 = np.array([machine_acc_test(np.float16(1),np.float16(2**-i)) for i in range(0,100) ])
     my_float16 = [i for i in my_float16 if i is not None]

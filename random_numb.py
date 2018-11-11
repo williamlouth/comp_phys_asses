@@ -45,7 +45,7 @@ def random_numb_asses(rand_number = 10**5):
     sin2 = np.array([x for x in uniform_0topi_4length if np.random.uniform(0,1) < (2/np.pi)*(np.sin(x))**2])
     print("epsilon for rejection method with comparison function y = 1",len(sin2)/len(uniform_0topi_4length))
     
-    sin2 = sin2[:rand_number]
+    sin2 = sin2[:rand_number] #extract the desired number of random numbers
     pl.figure(5)
     pl.figure(figsize=(10,7.5))
     pl.xlabel("x",fontsize = 20)
@@ -66,7 +66,7 @@ def random_numb_asses(rand_number = 10**5):
     print("epsilon for rejection method with comparison function y = 2/pi sin(x)",len(sin3)/len(uniform_0to1_2length))
     
   
-    sin3 = sin3[:rand_number]
+    sin3 = sin3[:rand_number]  #extract the desired number of random numbers
     pl.figure(6)
     pl.figure(figsize=(10,7.5))
     pl.xlabel("x",fontsize = 20)

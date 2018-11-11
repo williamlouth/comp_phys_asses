@@ -20,7 +20,13 @@ def decomposition(input_array):
             raise Exception("input array is not a square matrix. Matrix shape is",input_array.shape)
     except IndexError:
         raise Exception("input array is not a square matrix. array shape is",input_array.shape)
-        
+    
+    diag_product = 1.0
+    for i in range(0,input_array.shape[0]):
+        diag_product *= input_array[i][i]
+    if diag_product == 0:
+        raise Exception("There is a 0 element on the diaganol of the input matrix," + input_array + 
+                        " this requires pivoting which is not implemented in this algorithm")
         
     
     N = input_array.shape[0]
@@ -28,7 +34,7 @@ def decomposition(input_array):
     U = np.zeros((N,N))
     
     for i in range(0,N):
-        L[i][i] = 1.0               #crouts method used so leading edge on Lower set to 1
+        L[i][i] = 1.0               #crouts method used so diagonal on Lower set to 1
     
     for j in range(0,N):            #stepping through the columns
         for i in range(0,j+1):      #this for loop fills in the upper matrix, steps through the row up to the number of the column
@@ -46,7 +52,7 @@ def decomposition(input_array):
             
     output_L = np.copy(L)   #keep a copy of L before removing diagonal ones
     for i in range(0,N):
-        L[i][i] = 0.0       #for putting L and U into 1 matrix remove the leading edge of lower that we set all to 1 at start (crouts method)
+        L[i][i] = 0.0       #for putting L and U into 1 matrix remove the diaganol of lower that we set all to 1 at start (crouts method)
         
     det = 1.0
     for i in range(0,N):

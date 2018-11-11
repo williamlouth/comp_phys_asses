@@ -1,7 +1,6 @@
 import numpy as np
 import pylab as pl
 import matplotlib.lines as mlines
-import matplotlib.patches as mpatches
 
 
 def asses_gaussian(t):
@@ -31,7 +30,7 @@ def fft_asses():
     gfft = np.fft.fft(gt)           #fourier trasnform of g
     
     conv = step_size*np.fft.ifft(gfft*hfft)   #the convolution of g and h using the convolution theorem
-    #step_size is the normalisation constant
+    #step_size is the normalisation constant due to using discrete transforms
     
     
     fft_freq = np.fft.fftfreq(no_points)      #the frequencies that the fourier transform returns
@@ -44,8 +43,8 @@ def fft_asses():
     orange_line = mlines.Line2D([], [], color='orange', marker='+', markersize=15, label='g(t)')
     blue_line = mlines.Line2D([], [], color='blue', marker='+', markersize=15, label='h(t)')
     pl.legend(handles=[orange_line,blue_line])
-    pl.plot(t,gt,'orange')
-    pl.plot(t,ht,'b')
+    pl.plot(t,gt,'orange')          #plotting on this line rest is setup
+    pl.plot(t,ht,'b')               #second plotting line
     pl.savefig("gtht.png",bbox_inches = 'tight',dpi = 200)
     
     pl.figure(8)        #plot the real parts of the fourier transform
@@ -56,8 +55,8 @@ def fft_asses():
     orange_line = mlines.Line2D([], [], color='orange', marker='+', markersize=15, label='fft of g(t)')
     blue_line = mlines.Line2D([], [], color='blue', marker='+', markersize=15, label='fft of h(t)')
     pl.legend(handles=[orange_line,blue_line])
-    pl.plot(fft_freq,hfft.real,'b')
-    pl.plot(fft_freq,gfft.real,'orange')
+    pl.plot(fft_freq,hfft.real,'b')             #plotting line
+    pl.plot(fft_freq,gfft.real,'orange')        #plotting line
     pl.savefig("ffts.png",bbox_inches = 'tight',dpi = 200)
     
     
@@ -70,10 +69,7 @@ def fft_asses():
     pl.plot(t,conv.real)
     pl.savefig("conv.png",bbox_inches = 'tight',dpi = 200)
 
-
-
-
-
+    
 
 
 

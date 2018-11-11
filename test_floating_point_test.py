@@ -9,6 +9,7 @@ class test(unittest.TestCase):
         self.assertEqual(fpt.machine_acc_test(np.float16(1),np.float16(2**-4)),2**-4)
         self.assertEqual(fpt.machine_acc_test(np.float32(1),np.float32(2**-4)),2**-4)
         self.assertEqual(fpt.machine_acc_test(np.float64(1),np.float64(2**-4)),2**-4)
+        self.assertRaises(Exception,fpt.machine_acc_test,np.float16(1.0),np.float32(0.5))
         
   
         

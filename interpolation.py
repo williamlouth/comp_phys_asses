@@ -1,11 +1,7 @@
 import numpy as np
 import pylab as pl
 import matplotlib.lines as mlines
-import matplotlib.patches as mpatches
 import LU_decomp as LU
-
-
-
 
 
 
@@ -113,9 +109,9 @@ def interp_asses_func():
     cubic_number = 100
     linear_number = 100
 
-    xs = np.linspace(-2.1,3.8,linear_number)       #create lots of x values between x start and x end for linear interpolation
-    xs = np.append(xs,x)                #adding the given points to the curve as else can get 
-    xs = np.sort(xs)                    #some weird behaviour between the two points either side of a given point.
+    xs = np.linspace(x[0],x[-1],linear_number)       #create lots of x values between x start and x end for linear interpolation
+    xs = np.append(xs,x)                #adding the given points to the curve as else can appear 
+    xs = np.sort(xs)                    #as if there is an odd gradient between the two points either side of a given point.
 
     ys = np.array([linear_interp(x,y,j) for j in xs])
     
@@ -140,11 +136,12 @@ def interp_asses_func():
 
     X = cubic_spline_derivatives(x,y) #an array of the second derivatives
 
-    interp_x = np.linspace(-2.1,3.8,cubic_number)    #x values for the cubic spline
+    interp_x = np.linspace(x[0],x[-1],cubic_number)    #x values for the cubic spline
     interp_y = np.array([cubic_spline_interpolation(x,y,X,interp_x[i]) for i in range(interp_x.shape[0])])
  
     pl.plot(interp_x,interp_y,'r+',markersize = 7.5)
     pl.savefig('interpolation.png',bbox_inches='tight',dpi = 250)
+    
     
     
 

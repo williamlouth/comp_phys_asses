@@ -1,4 +1,4 @@
-import numpy as np
+import pylab as pl
 import floating_point_test as fpt
 import LU_decomp as LU
 import interpolation as interp
@@ -16,6 +16,7 @@ fft.fft_asses()
 print("*************************************RANDOM NUMBER METHODS*************************************")
 ran.random_numb_asses()
 
+#pl.show()    #run this line if not using spyder
 
 
 
