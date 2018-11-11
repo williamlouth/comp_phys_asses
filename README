@@ -1,0 +1,16 @@
+all the results for the assessment can be reproduced by running the run_me.py file using python3. 
+The tasks can also be run seperately by running their respective files individually. 
+1. floating_point_test.py 2. LU_decomp.py 3. interpolation.py 4. fft.py 5. random_numb.py
+
+For each of the files there is also a test script which ensures that all the function operate as expected.
+These test scripts are called test_file.py . Where file is replaced with one of the names above.
+
+  
+The project is coded using python3 and makes extensive use of numpy arrays and list comprehensions.
+Many sections of the tasks are in a single list comprehension.
+Each python file contains an asses function which calls the requisite functions to execute the assessment
+tasks and to produce graphs of the results. 
+The larger functions in LU decomposition and interpolation have some input validation checking as these are most likely
+to give strange behaviour with erroneous inputs.
+
+
